@@ -1,0 +1,2616 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Έντυπα Ομίλων</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+    transition: background 0.25s, color 0.25s;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 10px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+/* DARK MODE */
+
+body.dark {
+    background: #111827;
+    color: #f3f4f6;
+}
+
+body.dark .group,
+body.dark .group-header {
+    background: #1f2937;
+    color: #f3f4f6;
+}
+
+body.dark .group-header:hover {
+    background: #374151;
+}
+
+body.dark .table-header {
+    background: #374151;
+    border-color: #4b5563;
+}
+
+body.dark .person {
+    border-color: #374151;
+}
+
+body.dark .person.completed {
+    background: #14532d;
+}
+
+body.dark .person.completed .person-name,
+body.dark .person.completed .number {
+    color: #86efac;
+}
+
+body.dark .tab {
+    background: #374151;
+    color: #f3f4f6;
+}
+
+body.dark .tab.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* TABS */
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.tab {
+    border: none;
+    background: #dfe3e8;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.tab.active {
+    background: #2563eb;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ACTIONS */
+
+.actions {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 15px;
+}
+
+.icon-button {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition:
+        transform 0.15s,
+        opacity 0.15s,
+        background 0.25s;
+}
+
+.icon-button:hover {
+    transform: scale(1.06);
+    opacity: 0.9;
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
+
+.select-all {
+    background: #16a34a;
+    color: white;
+}
+
+.clear-all {
+    background: #64748b;
+    color: white;
+}
+
+.edit-button {
+    background: #f59e0b;
+    color: white;
+}
+
+.dark-button {
+    background: #1f2937;
+    color: white;
+}
+
+body.dark .dark-button {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+/* GROUP */
+
+.group {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.group-header {
+    width: 100%;
+    border: none;
+    background: white;
+    padding: 17px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.group-header:hover {
+    background: #f8fafc;
+}
+
+.arrow {
+    width: 20px;
+}
+
+.group-content {
+    display: none;
+}
+
+.group.open .group-content {
+    display: block;
+}
+
+/* SCROLL */
+
+.group-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.group-table {
+    min-width: 650px;
+}
+
+/* HEADER */
+
+.table-header {
+    display: grid;
+    grid-template-columns:
+        40px
+        minmax(230px, 1fr)
+        110px
+        110px
+        110px;
+
+    align-items: center;
+    padding: 12px 15px;
+    background: #f1f5f9;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.table-header span:nth-child(n+3) {
+    text-align: center;
+}
+
+/* PERSON */
+
+.person {
+    display: grid;
+    grid-template-columns:
+        40px
+        minmax(230px, 1fr)
+        110px
+        110px
+        110px;
+
+    align-items: center;
+    min-height: 58px;
+    padding: 8px 15px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    transition:
+        background 0.2s,
+        color 0.2s;
+}
+
+.person:last-child {
+    border-bottom: none;
+}
+
+/* CHECKBOX */
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #16a34a;
+}
+
+/* NAME */
+
+.person-name {
+    font-weight: 600;
+}
+
+/* NUMBERS */
+
+.number {
+    text-align: center;
+    font-weight: 600;
+}
+
+/* CHECKED */
+
+.person.completed {
+    background: #dcfce7;
+}
+
+.person.completed .person-name,
+.person.completed .number {
+    color: #15803d;
+    font-weight: bold;
+}
+
+/* EDIT */
+
+.edit-mode .number.editable-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editable-input {
+    width: 65px;
+    height: 32px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+
+    text-align: center;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    background: white;
+    color: #1f2937;
+}
+
+body.dark .editable-input {
+    background: #374151;
+    color: white;
+    border-color: #6b7280;
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 7px;
+
+    padding: 10px 15px;
+
+    background: #f8fafc;
+    border-top: 1px solid #e5e7eb;
+}
+
+body.dark .edit-actions {
+    background: #111827;
+    border-color: #374151;
+}
+
+.edit-save,
+.edit-cancel {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+    color: white;
+}
+
+.edit-save {
+    background: #16a34a;
+}
+
+.edit-cancel {
+    background: #64748b;
+}
+
+/* MOBILE */
+
+@media (max-width: 750px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 8px;
+        margin-top: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .group-header {
+        padding: 15px 12px;
+        font-size: 16px;
+    }
+
+    .group-table {
+        min-width: 650px;
+    }
+
+    .table-header,
+    .person {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .icon-button {
+        width: 36px;
+        height: 36px;
+        font-size: 17px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Έντυπα Ομίλων</h1>
+
+<div class="tabs">
+
+    <button
+        class="tab active"
+        onclick="showTab('monthly', this)"
+    >
+        Μηνιαίο
+    </button>
+
+    <button
+        class="tab"
+        onclick="showTab('annual', this)"
+    >
+        Ετήσιο
+    </button>
+
+</div>
+
+<div class="actions">
+
+    <button
+        class="icon-button select-all"
+        onclick="checkAll()"
+        title="Επιλογή όλων"
+        aria-label="Επιλογή όλων"
+    >
+        ✓
+    </button>
+
+    <button
+        class="icon-button clear-all"
+        onclick="uncheckAll()"
+        title="Καθαρισμός"
+        aria-label="Καθαρισμός"
+    >
+        ↺
+    </button>
+
+    <button
+        class="icon-button edit-button"
+        onclick="toggleEditMode()"
+        title="Επεξεργασία"
+        aria-label="Επεξεργασία"
+        id="editModeButton"
+    >
+        ✎
+    </button>
+
+    <button
+        class="icon-button dark-button"
+        onclick="toggleDarkMode()"
+        title="Dark Mode"
+        aria-label="Dark Mode"
+        id="darkModeButton"
+    >
+        ☾
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     ΜΗΝΙΑΙΟ
+====================================================== -->
+
+<div id="monthly" class="tab-content active">
+
+<!-- 1 - ΓΙΟΚΑΛΑΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+    <span class="arrow">▶</span>
+    <span>1 - Γιόκαλας</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+    <span></span>
+    <span>Όνομα</span>
+    <span>Μελέτης</span>
+    <span>Φυλλάδιο</span>
+    <span>Μεγάλα</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΓΙΟΚΑΛΑΣ ΒΑΓΓΕΛΗΣ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΓΚΕΛΛΑΣ ΓΙΩΡΓΟΣ</span>
+<span class="number">3</span>
+<span class="number">2</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΤΣΑΟΥΣΗΣ ΔΗΜΗΤΡΗΣ</span>
+<span class="number">3</span>
+<span class="number">2</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΑΡΛΑΚΑ ΕΥΑΓΓΕΛΙΑ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΣΓΟΥΡΝΙΟΥ ΒΑΣΩ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΠΙΝΗ ΣΤΕΛΛΑ</span>
+<span class="number">1</span>
+<span class="number">2</span>
+<span class="number">1</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 2 - ΜΠΙΝΗΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>2 - Μπινής</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Μελέτης</span>
+<span>Φυλλάδιο</span>
+<span>Μεγάλα</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΦΡΟΥΝΤΑ ΣΟΦΙΑ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΦΡΙΚΗ ΔΕΣΠΟΙΝΑ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΑΚΡΟΠΟΥΛΟΣ ΧΡΙΣΤΟΔΟΥΛΟΣ</span>
+<span class="number">2</span>
+<span class="number">2</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΠΙΝΗΣ ΠΕΤΡΟΣ</span>
+<span class="number">2</span>
+<span class="number">3</span>
+<span class="number">1</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΠΑΤΣΙΑ ΠΑΡΑΣΚΕΥΗ</span>
+<span class="number">-</span>
+<span class="number">1</span>
+<span class="number">1</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 3 - ΜΠΥΡΟΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>3 - Μπύρος</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Μελέτης</span>
+<span>Φυλλάδιο</span>
+<span>Μεγάλα</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΟΡΦΙΔΗΣ ΓΙΑΝΝΗΣ</span>
+<span class="number">3</span>
+<span class="number">2</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΣΕΛΙΜΙ ΜΙΜΟΖΑ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 4 - ΓΟΥΒΕΔΑΡΗΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>4 - Γουβεδάρης</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Μελέτης</span>
+<span>Φυλλάδιο</span>
+<span>Μεγάλα</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΓΕΩΡΓΑΝΤΑ ΤΑΣΟΥΛΑ</span>
+<span class="number">-</span>
+<span class="number">1</span>
+<span class="number">1</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 5 - ΚΟΥΚΑ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>5 - Κούκα</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Μελέτης</span>
+<span>Φυλλάδιο</span>
+<span>Μεγάλα</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΚΑΛΑΪΤΖΗ ΜΑΡΙΑ</span>
+<span class="number">1</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΠΥΡΟΣ ΣΤΑΜΑΤΗΣ</span>
+<span class="number">2</span>
+<span class="number">-</span>
+<span class="number">-</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ΕΤΗΣΙΟ
+====================================================== -->
+
+<div id="annual" class="tab-content">
+
+<!-- 1 - ΓΙΟΚΑΛΑΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>1 - Γιόκαλας</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Καθημερινή Εξέταση</span>
+<span>Εξέταση Μεγάλα</span>
+<span>Τόμος</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΓΚΕΛΛΑΣ ΓΙΩΡΓΟΣ</span>
+<span class="number">1</span>
+<span class="number">-</span>
+<span class="number">1</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΑΡΛΑΚΑ ΕΥΑΓΓΕΛΙΑ</span>
+<span class="number">1</span>
+<span class="number">-</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΣΓΟΥΡΝΙΟΥ ΒΑΣΩ</span>
+<span class="number">1</span>
+<span class="number">-</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ZOLOTAREVA VIKTORIA</span>
+<span class="number">-</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΠΙΝΗ ΣΤΕΛΛΑ</span>
+<span class="number">-</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 2 - ΜΠΙΝΗΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>2 - Μπινής</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Καθημερινή Εξέταση</span>
+<span>Εξέταση Μεγάλα</span>
+<span>Τόμος</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΦΡΟΥΝΤΑ ΣΟΦΙΑ</span>
+<span class="number">1</span>
+<span class="number">-</span>
+<span class="number">-</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΠΙΝΗΣ ΠΕΤΡΟΣ</span>
+<span class="number">2</span>
+<span class="number">1</span>
+<span class="number">1</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 3 - ΜΠΥΡΟΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>3 - Μπύρος</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Καθημερινή Εξέταση</span>
+<span>Εξέταση Μεγάλα</span>
+<span>Τόμος</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΜΟΡΦΙΔΗΣ ΓΙΑΝΝΗΣ</span>
+<span class="number">1</span>
+<span class="number">2</span>
+<span class="number">-</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 4 - ΓΟΥΒΕΔΑΡΗΣ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>4 - Γουβεδάρης</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Καθημερινή Εξέταση</span>
+<span>Εξέταση Μεγάλα</span>
+<span>Τόμος</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">ΓΕΩΡΓΑΝΤΑ ΤΑΣΟΥΛΑ</span>
+<span class="number">-</span>
+<span class="number">1</span>
+<span class="number">-</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- 5 - ΚΟΥΚΑ -->
+
+<div class="group">
+
+<button class="group-header" onclick="toggleGroup(this)">
+<span class="arrow">▶</span>
+<span>5 - Κούκα</span>
+</button>
+
+<div class="group-content">
+<div class="group-scroll">
+<div class="group-table">
+
+<div class="table-header">
+<span></span>
+<span>Όνομα</span>
+<span>Καθημερινή Εξέταση</span>
+<span>Εξέταση Μεγάλα</span>
+<span>Τόμος</span>
+</div>
+
+<div class="person">
+<input type="checkbox" class="checkbox" onchange="togglePerson(this)">
+<span class="person-name">-</span>
+<span class="number">-</span>
+<span class="number">-</span>
+<span class="number">-</span>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+/*
+==========================================================
+   ΕΚΔΟΣΗ ΑΠΟΘΗΚΕΥΣΗΣ
+==========================================================
+*/
+
+const STORAGE_KEY =
+    "entypa_omilon_selections_v6";
+
+const NUMBERS_STORAGE_KEY =
+    "entypa_omilon_numbers_v6";
+
+const DARK_MODE_KEY =
+    "entypa_omilon_dark_mode_v6";
+
+
+/*
+==========================================================
+   INDEXED DB
+==========================================================
+*/
+
+const DB_NAME =
+    "EntypaOmilonPersistentV6";
+
+const DB_VERSION = 1;
+
+const DB_STORE =
+    "data";
+
+
+let database = null;
+
+let editMode = false;
+
+
+/*
+   Τα δεδομένα μένουν και στη μνήμη.
+
+   Αυτό είναι σημαντικό ώστε όταν κάνουμε
+   μια αλλαγή να μην ξαναφορτώνουμε παλιά
+   δεδομένα από τη βάση.
+*/
+
+let selectionsData = {};
+
+let numbersData = {};
+
+let darkModeData = false;
+
+
+/*
+==========================================================
+   ΑΝΟΙΓΜΑ DATABASE
+==========================================================
+*/
+
+function openDatabase() {
+
+    return new Promise((resolve) => {
+
+        if (!window.indexedDB) {
+
+            resolve(false);
+            return;
+        }
+
+
+        try {
+
+            const request =
+                indexedDB.open(
+                    DB_NAME,
+                    DB_VERSION
+                );
+
+
+            request.onupgradeneeded =
+                function(event) {
+
+                    const db =
+                        event.target.result;
+
+
+                    if (
+                        !db.objectStoreNames
+                            .contains(DB_STORE)
+                    ) {
+
+                        db.createObjectStore(
+                            DB_STORE
+                        );
+                    }
+                };
+
+
+            request.onsuccess =
+                function(event) {
+
+                    database =
+                        event.target.result;
+
+
+                    database.onversionchange =
+                        function() {
+
+                            database.close();
+                        };
+
+
+                    resolve(true);
+                };
+
+
+            request.onerror =
+                function() {
+
+                    resolve(false);
+                };
+
+
+        } catch (error) {
+
+            console.log(
+                "IndexedDB error:",
+                error
+            );
+
+            resolve(false);
+        }
+
+    });
+}
+
+
+/*
+==========================================================
+   DATABASE GET
+==========================================================
+*/
+
+function dbGet(key) {
+
+    return new Promise((resolve) => {
+
+        if (!database) {
+
+            resolve(null);
+            return;
+        }
+
+
+        try {
+
+            const transaction =
+                database.transaction(
+                    DB_STORE,
+                    "readonly"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    DB_STORE
+                );
+
+
+            const request =
+                store.get(key);
+
+
+            request.onsuccess =
+                function() {
+
+                    if (
+                        request.result !==
+                            undefined &&
+                        request.result !==
+                            null
+                    ) {
+
+                        resolve(
+                            request.result
+                        );
+
+                    } else {
+
+                        resolve(null);
+                    }
+                };
+
+
+            request.onerror =
+                function() {
+
+                    resolve(null);
+                };
+
+
+        } catch (error) {
+
+            resolve(null);
+        }
+
+    });
+}
+
+
+/*
+==========================================================
+   DATABASE SET
+==========================================================
+*/
+
+function dbSet(key, value) {
+
+    return new Promise((resolve) => {
+
+        if (!database) {
+
+            resolve(false);
+            return;
+        }
+
+
+        try {
+
+            const transaction =
+                database.transaction(
+                    DB_STORE,
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    DB_STORE
+                );
+
+
+            store.put(
+                value,
+                key
+            );
+
+
+            transaction.oncomplete =
+                function() {
+
+                    resolve(true);
+                };
+
+
+            transaction.onerror =
+                function() {
+
+                    resolve(false);
+                };
+
+
+            transaction.onabort =
+                function() {
+
+                    resolve(false);
+                };
+
+
+        } catch (error) {
+
+            resolve(false);
+        }
+
+    });
+}
+
+
+/*
+==========================================================
+   LOCAL STORAGE
+==========================================================
+*/
+
+function localGet(key) {
+
+    try {
+
+        const value =
+            localStorage.getItem(key);
+
+
+        if (value === null) {
+
+            return null;
+        }
+
+
+        return JSON.parse(value);
+
+    } catch (error) {
+
+        return null;
+    }
+}
+
+
+function localSet(key, value) {
+
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+
+        return true;
+
+    } catch (error) {
+
+        console.log(
+            "localStorage error:",
+            error
+        );
+
+
+        return false;
+    }
+}
+
+
+/*
+==========================================================
+   MERGE
+==========================================================
+*/
+
+function mergeObjects(
+    first,
+    second
+) {
+
+    const result = {};
+
+
+    if (
+        first &&
+        typeof first === "object" &&
+        !Array.isArray(first)
+    ) {
+
+        Object.assign(
+            result,
+            first
+        );
+    }
+
+
+    if (
+        second &&
+        typeof second === "object" &&
+        !Array.isArray(second)
+    ) {
+
+        Object.assign(
+            result,
+            second
+        );
+    }
+
+
+    return result;
+}
+
+
+/*
+==========================================================
+   ΑΡΧΙΚΟΠΟΙΗΣΗ ΑΠΟΘΗΚΕΥΣΗΣ
+==========================================================
+*/
+
+async function initializeStorage() {
+
+    await openDatabase();
+
+
+    /*
+       CHECKBOX
+    */
+
+    const localSelections =
+        localGet(STORAGE_KEY);
+
+
+    const dbSelections =
+        await dbGet(STORAGE_KEY);
+
+
+    selectionsData =
+        mergeObjects(
+            localSelections,
+            dbSelections
+        );
+
+
+    localSet(
+        STORAGE_KEY,
+        selectionsData
+    );
+
+
+    await dbSet(
+        STORAGE_KEY,
+        selectionsData
+    );
+
+
+    /*
+       NUMBERS
+    */
+
+    const localNumbers =
+        localGet(
+            NUMBERS_STORAGE_KEY
+        );
+
+
+    const dbNumbers =
+        await dbGet(
+            NUMBERS_STORAGE_KEY
+        );
+
+
+    numbersData =
+        mergeObjects(
+            localNumbers,
+            dbNumbers
+        );
+
+
+    localSet(
+        NUMBERS_STORAGE_KEY,
+        numbersData
+    );
+
+
+    await dbSet(
+        NUMBERS_STORAGE_KEY,
+        numbersData
+    );
+
+
+    /*
+       DARK MODE
+    */
+
+    const localDark =
+        localGet(
+            DARK_MODE_KEY
+        );
+
+
+    const dbDark =
+        await dbGet(
+            DARK_MODE_KEY
+        );
+
+
+    if (
+        typeof localDark ===
+        "boolean"
+    ) {
+
+        darkModeData =
+            localDark;
+
+    } else if (
+        typeof dbDark ===
+        "boolean"
+    ) {
+
+        darkModeData =
+            dbDark;
+
+    } else {
+
+        darkModeData = false;
+    }
+
+
+    localSet(
+        DARK_MODE_KEY,
+        darkModeData
+    );
+
+
+    await dbSet(
+        DARK_MODE_KEY,
+        darkModeData
+    );
+}
+
+
+/*
+==========================================================
+   ΑΠΟΘΗΚΕΥΣΗ CHECKBOX
+==========================================================
+*/
+
+async function persistSelections() {
+
+    const copy =
+        Object.assign(
+            {},
+            selectionsData
+        );
+
+
+    /*
+       Γράφουμε και στις δύο αποθήκες.
+    */
+
+    localSet(
+        STORAGE_KEY,
+        copy
+    );
+
+
+    await dbSet(
+        STORAGE_KEY,
+        copy
+    );
+}
+
+
+/*
+==========================================================
+   ΑΠΟΘΗΚΕΥΣΗ NUMBERS
+==========================================================
+*/
+
+async function persistNumbers() {
+
+    const copy =
+        Object.assign(
+            {},
+            numbersData
+        );
+
+
+    localSet(
+        NUMBERS_STORAGE_KEY,
+        copy
+    );
+
+
+    await dbSet(
+        NUMBERS_STORAGE_KEY,
+        copy
+    );
+}
+
+
+/*
+==========================================================
+   ΑΠΟΘΗΚΕΥΣΗ DARK MODE
+==========================================================
+*/
+
+async function persistDarkMode() {
+
+    localSet(
+        DARK_MODE_KEY,
+        darkModeData
+    );
+
+
+    await dbSet(
+        DARK_MODE_KEY,
+        darkModeData
+    );
+}
+
+
+/*
+==========================================================
+   PERSON ID
+==========================================================
+*/
+
+function getPersonId(person) {
+
+    const tab =
+        person.closest(
+            ".tab-content"
+        );
+
+
+    const tabId =
+        tab
+        ? tab.id
+        : "unknown";
+
+
+    const group =
+        person.closest(
+            ".group"
+        );
+
+
+    const header =
+        group
+        ? group.querySelector(
+            ".group-header"
+        )
+        : null;
+
+
+    let groupName =
+        header
+        ? header.innerText.trim()
+        : "unknown";
+
+
+    groupName =
+        groupName
+            .replace(/^▶\s*/, "")
+            .replace(/^▼\s*/, "")
+            .trim();
+
+
+    const nameElement =
+        person.querySelector(
+            ".person-name"
+        );
+
+
+    const personName =
+        nameElement
+        ? nameElement.innerText.trim()
+        : "unknown";
+
+
+    return (
+        tabId +
+        "|" +
+        groupName +
+        "|" +
+        personName
+    );
+}
+
+
+/*
+==========================================================
+   CHECK PERSON
+==========================================================
+*/
+
+async function togglePerson(
+    checkbox
+) {
+
+    const person =
+        checkbox.closest(
+            ".person"
+        );
+
+
+    if (!person) {
+
+        return;
+    }
+
+
+    const checked =
+        checkbox.checked;
+
+
+    person.classList.toggle(
+        "completed",
+        checked
+    );
+
+
+    const id =
+        getPersonId(person);
+
+
+    /*
+       Αλλάζουμε μόνο το συγκεκριμένο
+       άτομο.
+    */
+
+    selectionsData[id] =
+        checked;
+
+
+    /*
+       Αποθήκευση αμέσως.
+    */
+
+    await persistSelections();
+}
+
+
+/*
+==========================================================
+   ΦΟΡΤΩΣΗ CHECKBOX
+==========================================================
+*/
+
+function loadSelections() {
+
+    document
+        .querySelectorAll(
+            ".person"
+        )
+        .forEach(
+            function(person) {
+
+                const checkbox =
+                    person.querySelector(
+                        ".checkbox"
+                    );
+
+
+                if (!checkbox) {
+
+                    return;
+                }
+
+
+                const id =
+                    getPersonId(
+                        person
+                    );
+
+
+                checkbox.checked =
+                    selectionsData[id] ===
+                    true;
+
+
+                person.classList.toggle(
+                    "completed",
+                    checkbox.checked
+                );
+            }
+        );
+}
+
+
+/*
+==========================================================
+   CHECK ALL
+==========================================================
+*/
+
+async function checkAll() {
+
+    document
+        .querySelectorAll(
+            ".tab-content.active .person"
+        )
+        .forEach(
+            function(person) {
+
+                const checkbox =
+                    person.querySelector(
+                        ".checkbox"
+                    );
+
+
+                if (!checkbox) {
+
+                    return;
+                }
+
+
+                checkbox.checked = true;
+
+
+                person.classList.add(
+                    "completed"
+                );
+
+
+                selectionsData[
+                    getPersonId(person)
+                ] = true;
+            }
+        );
+
+
+    await persistSelections();
+}
+
+
+/*
+==========================================================
+   UNCHECK ALL
+==========================================================
+*/
+
+async function uncheckAll() {
+
+    document
+        .querySelectorAll(
+            ".tab-content.active .person"
+        )
+        .forEach(
+            function(person) {
+
+                const checkbox =
+                    person.querySelector(
+                        ".checkbox"
+                    );
+
+
+                if (!checkbox) {
+
+                    return;
+                }
+
+
+                checkbox.checked = false;
+
+
+                person.classList.remove(
+                    "completed"
+                );
+
+
+                selectionsData[
+                    getPersonId(person)
+                ] = false;
+            }
+        );
+
+
+    await persistSelections();
+}
+
+
+/*
+==========================================================
+   GROUP
+==========================================================
+*/
+
+function toggleGroup(button) {
+
+    const group =
+        button.closest(
+            ".group"
+        );
+
+
+    if (!group) {
+
+        return;
+    }
+
+
+    group.classList.toggle(
+        "open"
+    );
+
+
+    const arrow =
+        button.querySelector(
+            ".arrow"
+        );
+
+
+    if (arrow) {
+
+        arrow.textContent =
+            group.classList.contains(
+                "open"
+            )
+            ? "▼"
+            : "▶";
+    }
+}
+
+
+/*
+==========================================================
+   TABS
+==========================================================
+*/
+
+function showTab(
+    tabId,
+    button
+) {
+
+    if (editMode) {
+
+        disableEditing();
+    }
+
+
+    document
+        .querySelectorAll(
+            ".tab-content"
+        )
+        .forEach(
+            function(tab) {
+
+                tab.classList.remove(
+                    "active"
+                );
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".tab"
+        )
+        .forEach(
+            function(tab) {
+
+                tab.classList.remove(
+                    "active"
+                );
+            }
+        );
+
+
+    const selected =
+        document.getElementById(
+            tabId
+        );
+
+
+    if (selected) {
+
+        selected.classList.add(
+            "active"
+        );
+    }
+
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+    }
+}
+
+
+/*
+==========================================================
+   EDIT MODE
+==========================================================
+*/
+
+function toggleEditMode() {
+
+    if (editMode) {
+
+        disableEditing();
+
+    } else {
+
+        enableEditing();
+    }
+}
+
+
+/*
+==========================================================
+   ENABLE EDIT
+==========================================================
+*/
+
+function enableEditing() {
+
+    editMode = true;
+
+
+    document.body.classList.add(
+        "edit-mode"
+    );
+
+
+    const button =
+        document.getElementById(
+            "editModeButton"
+        );
+
+
+    if (button) {
+
+        button.textContent =
+            "✕";
+
+        button.title =
+            "Έξοδος από επεξεργασία";
+    }
+
+
+    document
+        .querySelectorAll(
+            ".number"
+        )
+        .forEach(
+            function(number) {
+
+                if (
+                    number.querySelector(
+                        ".editable-input"
+                    )
+                ) {
+
+                    return;
+                }
+
+
+                const value =
+                    number.textContent.trim();
+
+
+                number.dataset.original =
+                    value;
+
+
+                number.classList.add(
+                    "editable-number"
+                );
+
+
+                const input =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                input.type = "text";
+
+                input.inputMode =
+                    "numeric";
+
+                input.className =
+                    "editable-input";
+
+                input.value =
+                    value;
+
+
+                input.dataset.original =
+                    value;
+
+
+                input.addEventListener(
+                    "input",
+                    function() {
+
+                        this.value =
+                            this.value.replace(
+                                /[^0-9-]/g,
+                                ""
+                            );
+                    }
+                );
+
+
+                number.textContent = "";
+
+                number.appendChild(
+                    input
+                );
+            }
+        );
+
+
+    /*
+       Κουμπιά αποθήκευσης
+    */
+
+    document
+        .querySelectorAll(
+            ".group"
+        )
+        .forEach(
+            function(group) {
+
+                if (
+                    group.querySelector(
+                        ".edit-actions"
+                    )
+                ) {
+
+                    return;
+                }
+
+
+                const content =
+                    group.querySelector(
+                        ".group-content"
+                    );
+
+
+                if (!content) {
+
+                    return;
+                }
+
+
+                const actions =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                actions.className =
+                    "edit-actions";
+
+
+                actions.innerHTML = `
+                    <button
+                        class="edit-save"
+                        onclick="saveGroupEdit(this)"
+                        title="Αποθήκευση"
+                    >
+                        💾
+                    </button>
+
+                    <button
+                        class="edit-cancel"
+                        onclick="cancelGroupEdit(this)"
+                        title="Ακύρωση"
+                    >
+                        ✕
+                    </button>
+                `;
+
+
+                content.appendChild(
+                    actions
+                );
+            }
+        );
+}
+
+
+/*
+==========================================================
+   DISABLE EDIT
+==========================================================
+*/
+
+function disableEditing() {
+
+    editMode = false;
+
+
+    document.body.classList.remove(
+        "edit-mode"
+    );
+
+
+    const button =
+        document.getElementById(
+            "editModeButton"
+        );
+
+
+    if (button) {
+
+        button.textContent =
+            "✎";
+
+        button.title =
+            "Επεξεργασία";
+    }
+
+
+    document
+        .querySelectorAll(
+            ".number"
+        )
+        .forEach(
+            function(number) {
+
+                const input =
+                    number.querySelector(
+                        ".editable-input"
+                    );
+
+
+                if (input) {
+
+                    number.textContent =
+                        input.value.trim() ||
+                        "-";
+                }
+
+
+                number.classList.remove(
+                    "editable-number"
+                );
+
+
+                delete number.dataset.original;
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".edit-actions"
+        )
+        .forEach(
+            function(actions) {
+
+                actions.remove();
+            }
+        );
+}
+
+
+/*
+==========================================================
+   SAVE GROUP EDIT
+==========================================================
+*/
+
+async function saveGroupEdit(
+    button
+) {
+
+    const group =
+        button.closest(
+            ".group"
+        );
+
+
+    if (!group) {
+
+        return;
+    }
+
+
+    /*
+       ΔΕΝ ξαναφορτώνουμε τη βάση εδώ.
+
+       Χρησιμοποιούμε το numbersData
+       που ήδη περιέχει όλα τα δεδομένα.
+    */
+
+    const persons =
+        group.querySelectorAll(
+            ".person"
+        );
+
+
+    persons.forEach(
+        function(person) {
+
+            const numberElements =
+                person.querySelectorAll(
+                    ".number"
+                );
+
+
+            numberElements.forEach(
+                function(number, index) {
+
+                    const input =
+                        number.querySelector(
+                            ".editable-input"
+                        );
+
+
+                    if (!input) {
+
+                        return;
+                    }
+
+
+                    let value =
+                        input.value.trim();
+
+
+                    if (value === "") {
+
+                        value = "-";
+                    }
+
+
+                    const id =
+                        getPersonId(
+                            person
+                        ) +
+                        "|" +
+                        index;
+
+
+                    /*
+                       Μόνο αυτό το πεδίο
+                       αλλάζει.
+                    */
+
+                    numbersData[id] =
+                        value;
+                }
+            );
+        }
+    );
+
+
+    /*
+       Αποθηκεύουμε ΟΛΟ το ήδη
+       ενημερωμένο numbersData.
+
+       Τα υπόλοιπα δεδομένα παραμένουν.
+    */
+
+    await persistNumbers();
+
+
+    /*
+       Ενημέρωση εμφάνισης
+    */
+
+    persons.forEach(
+        function(person) {
+
+            person
+                .querySelectorAll(
+                    ".number"
+                )
+                .forEach(
+                    function(number) {
+
+                        const input =
+                            number.querySelector(
+                                ".editable-input"
+                            );
+
+
+                        if (!input) {
+
+                            return;
+                        }
+
+
+                        let value =
+                            input.value.trim();
+
+
+                        if (value === "") {
+
+                            value = "-";
+                        }
+
+
+                        number.textContent =
+                            value;
+
+
+                        number.classList.remove(
+                            "editable-number"
+                        );
+                    }
+                );
+        }
+    );
+
+
+    const actions =
+        group.querySelector(
+            ".edit-actions"
+        );
+
+
+    if (actions) {
+
+        actions.remove();
+    }
+
+
+    if (
+        !document.querySelector(
+            ".edit-actions"
+        )
+    ) {
+
+        editMode = false;
+
+
+        document.body.classList.remove(
+            "edit-mode"
+        );
+
+
+        const editButton =
+            document.getElementById(
+                "editModeButton"
+            );
+
+
+        if (editButton) {
+
+            editButton.textContent =
+                "✎";
+
+            editButton.title =
+                "Επεξεργασία";
+        }
+    }
+}
+
+
+/*
+==========================================================
+   CANCEL GROUP EDIT
+==========================================================
+*/
+
+function cancelGroupEdit(
+    button
+) {
+
+    const group =
+        button.closest(
+            ".group"
+        );
+
+
+    if (!group) {
+
+        return;
+    }
+
+
+    group
+        .querySelectorAll(
+            ".number"
+        )
+        .forEach(
+            function(number) {
+
+                const input =
+                    number.querySelector(
+                        ".editable-input"
+                    );
+
+
+                if (!input) {
+
+                    return;
+                }
+
+
+                number.textContent =
+                    input.dataset.original ||
+                    "-";
+
+
+                number.classList.remove(
+                    "editable-number"
+                );
+            }
+        );
+
+
+    const actions =
+        group.querySelector(
+            ".edit-actions"
+        );
+
+
+    if (actions) {
+
+        actions.remove();
+    }
+
+
+    if (
+        !document.querySelector(
+            ".edit-actions"
+        )
+    ) {
+
+        editMode = false;
+
+
+        document.body.classList.remove(
+            "edit-mode"
+        );
+
+
+        const editButton =
+            document.getElementById(
+                "editModeButton"
+            );
+
+
+        if (editButton) {
+
+            editButton.textContent =
+                "✎";
+
+            editButton.title =
+                "Επεξεργασία";
+        }
+    }
+}
+
+
+/*
+==========================================================
+   ΦΟΡΤΩΣΗ ΑΡΙΘΜΩΝ
+==========================================================
+*/
+
+function loadNumbers() {
+
+    document
+        .querySelectorAll(
+            ".person"
+        )
+        .forEach(
+            function(person) {
+
+                person
+                    .querySelectorAll(
+                        ".number"
+                    )
+                    .forEach(
+                        function(number, index) {
+
+                            const id =
+                                getPersonId(
+                                    person
+                                ) +
+                                "|" +
+                                index;
+
+
+                            /*
+                               Αν υπάρχει αποθηκευμένη
+                               τιμή, την εμφανίζουμε.
+
+                               Αν δεν υπάρχει, αφήνουμε
+                               την αρχική τιμή του HTML.
+                            */
+
+                            if (
+                                Object.prototype
+                                    .hasOwnProperty
+                                    .call(
+                                        numbersData,
+                                        id
+                                    )
+                            ) {
+
+                                number.textContent =
+                                    numbersData[id];
+                            }
+                        }
+                    );
+            }
+        );
+}
+
+
+/*
+==========================================================
+   DARK MODE
+==========================================================
+*/
+
+async function toggleDarkMode() {
+
+    darkModeData =
+        !darkModeData;
+
+
+    document.body.classList.toggle(
+        "dark",
+        darkModeData
+    );
+
+
+    await persistDarkMode();
+}
+
+
+function loadDarkMode() {
+
+    document.body.classList.toggle(
+        "dark",
+        darkModeData
+    );
+}
+
+
+/*
+==========================================================
+   ΕΝΑΡΞΗ ΕΦΑΡΜΟΓΗΣ
+==========================================================
+*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+        /*
+           ΠΡΩΤΑ φορτώνουμε την αποθήκευση.
+        */
+
+        await initializeStorage();
+
+
+        /*
+           ΜΕΤΑ εμφανίζουμε τα δεδομένα.
+        */
+
+        loadNumbers();
+
+        loadSelections();
+
+        loadDarkMode();
+    }
+);
+
+</script>
+
+</body>
+</html>
